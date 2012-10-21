@@ -110,33 +110,32 @@ class BouncyWalls {
     shape.setAsBoxWithCenterAndAngle(borderWidth, lineLength, new Vector( 25.0, 0.0), 0.0);
     ground.createFixtureFromShape(shape);
     
-
     // Add composite body to list
     bodies.add(ground);
   }
 
   void _createBox() {
-    // Create shape
-    final PolygonShape shape = new PolygonShape();
-    shape.setAsBoxWithCenterAndAngle(3.0, 1.5, new Vector(0, 0), PI / 2);
+    final ball = new CircleShape();
+    ball.radius = 2;
 
     // Define fixture (links body and shape)
     final FixtureDef activeFixtureDef = new FixtureDef();
-    activeFixtureDef.restitution = 0.5;
-    activeFixtureDef.density = 0.05;
-    activeFixtureDef.shape = shape;
+    // bounce "factore"
+    activeFixtureDef.restitution = 0.8;
+    activeFixtureDef.density = 2.0;
+    activeFixtureDef.shape = ball;
 
     // Define body
     final BodyDef bodyDef = new BodyDef();
     bodyDef.type = BodyType.DYNAMIC;
-    bodyDef.position = new Vector(0, 30.0);
+    bodyDef.position = new Vector(0, 10.0);
 
     // Create body and fixture from definitions
-    final Body fallingBox = world.createBody(bodyDef);
-    fallingBox.createFixture(activeFixtureDef);
+    final Body ballBody = world.createBody(bodyDef);
+    ballBody.createFixture(activeFixtureDef);
 
     // Add to list
-    bodies.add(fallingBox);
+    bodies.add(ballBody);
   }
   
   void runAnimation() {
