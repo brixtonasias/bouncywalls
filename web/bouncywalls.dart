@@ -108,6 +108,7 @@ class BouncyWalls {
   }
   
   void _updateWall(int controlState) {
+    // TODO: Adjust handling of bouncer
     print(controlState);
     if (controlState > 0) {
       final CircleShape halfCircle = new CircleShape();
