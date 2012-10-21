@@ -107,21 +107,29 @@ class BouncyWalls {
     world.debugDraw = debugDraw;
   }
   
+  void _updateWall(int controlState) {
+    print(controlState);
+    if (controlState > 0) {
+      final CircleShape halfCircle = new CircleShape();
+      halfCircle.radius = 100.0;
+      final FixtureDef fixDef = new FixtureDef();
+      fixDef.density = 2.0;
+      fixDef.restitution = 2.7;
+      fixDef.shape = halfCircle;
+      
+      final BodyDef bodyHalfCircleDef = new BodyDef();
+      bodyHalfCircleDef.type = BodyType.KINEMATIC;
+      bodyHalfCircleDef.position = new Vector(0.1,-122.0);
+      final Body halfCircleBody = world.createBody(bodyHalfCircleDef);
+      halfCircleBody.createFixture(fixDef);
+      bodies.add(halfCircleBody);
+    }
+  }
+  
   void _createGround() {
     // Create shape
     final PolygonShape shape = new PolygonShape();
-    final CircleShape halfCircle = new CircleShape();
-    halfCircle.radius = 100.0;
-    final FixtureDef fixDef = new FixtureDef();
-    fixDef.density = 2.0;
-    fixDef.restitution = 2.7;
-    fixDef.shape = halfCircle;
     
-    final BodyDef bodyHalfCircleDef = new BodyDef();
-    bodyHalfCircleDef.type = BodyType.KINEMATIC;
-    bodyHalfCircleDef.position = new Vector(0.1,-122.0);
-    final Body halfCircleBody = world.createBody(bodyHalfCircleDef);
-    halfCircleBody.createFixture(fixDef);
     
     // Define body
     final BodyDef bodyDef = new BodyDef();
@@ -145,7 +153,6 @@ class BouncyWalls {
     shape.setAsBoxWithCenterAndAngle(borderWidth, lineLength, new Vector( 25.0, 0.0), 0.0);
     ground.createFixtureFromShape(shape);
     
-    bodies.add(halfCircleBody);
     // Add composite body to list
     bodies.add(ground);
   }
@@ -182,7 +189,7 @@ class BouncyWalls {
   /** Advances the world forward by timestep seconds. */
   void step(num timestamp) {
     //_stopwatch.reset();
-    
+    _updateWall(_controlState);
     world.step(TIME_STEP, VELOCITY_ITERATIONS, POSITION_ITERATIONS);
 
     // Clear the animation panel and draw new frame.
