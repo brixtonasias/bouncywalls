@@ -1,11 +1,12 @@
 import 'dart:html';
 import 'package:box2d/box2d_browser.dart';
 import 'dart:math';
-
+import 'control_state.dart';
 
 num rotatePos = 0;
 
 class BouncyWalls {
+  int _controlState;
   /** Scale of the viewport. */
   static const num _VIEWPORT_SCALE = 10;
   /** The drawing canvas. */
@@ -61,7 +62,29 @@ class BouncyWalls {
   void initialize() {
     assert (null !== world);
     _createGround();
-    _createBox();
+    _createBall();
+    _controlState = 0;
+    // Register key bindings
+    document.on.keyDown.add(_handleKeyDown);
+    document.on.keyUp.add(_handleKeyUp);
+  }
+  
+  void _handleKeyDown(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case 37: _controlState |= ControlState.LEFT; break;
+      case 38: _controlState |= ControlState.UP; break;
+      case 39: _controlState |= ControlState.RIGHT; break;
+      case 40: _controlState |= ControlState.DOWN; break;
+    }
+  }
+  
+  void _handleKeyUp(KeyboardEvent event) {
+    switch (event.keyCode) {
+      case 37: _controlState &= ~ControlState.LEFT; break;
+      case 38: _controlState &= ~ControlState.UP; break;
+      case 39: _controlState &= ~ControlState.RIGHT; break;
+      case 40: _controlState &= ~ControlState.DOWN; break;
+    }
   }
   
   void initializeAnimation() {
@@ -114,9 +137,9 @@ class BouncyWalls {
     bodies.add(ground);
   }
 
-  void _createBox() {
+  void _createBall() {
     final ball = new CircleShape();
-    ball.radius = 2;
+    ball.radius = 1.45;
 
     // Define fixture (links body and shape)
     final FixtureDef activeFixtureDef = new FixtureDef();
