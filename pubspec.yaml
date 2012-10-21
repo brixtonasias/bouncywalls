@@ -1,0 +1,6 @@
+name: bouncywalls
+version: 0.0.1
+description: A little game for fun
+
+dependencies:
+  box2d: 0.0.3

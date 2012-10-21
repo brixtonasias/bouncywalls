@@ -1,4 +1,4 @@
 bouncywalls
 ===========
 
-First little game attempt
+First little game attempt in Dart (http://dartlang.org/).
